@@ -72,12 +72,6 @@ i naciśnij OK
 Otworzy się folder Autostartu.
 
 Skopiuj tam skrót do swojego pliku .exe 
-czyli Pogoda KRK.exe.lnk (nie sam plik exe, tylko skrót).
+czyli Pogoda-AirportPL.exe.lnk (nie sam plik exe, tylko skrót).
 
 Program będzie uruchamiał się automatycznie po zalogowaniu.
-   
-*   **Minimalizacja i Tray**:
-    *   Aplikacja posiada ikonkę w zasobniku systemowym (Tray) przy zegarze.
-    *   Zamknięcie okna przyciskiem "X" lub wybranie opcji z menu kontekstowego ukrywa aplikację do traya, skąd można ją szybko przywrócić.
-*   **Zamykanie**:
-    *   Pełne wyjście z aplikacji możliwe jest poprzez kliknięcie prawym przyciskiem myszy na ikonkę w zasobniku systemowym (Tray) i wybranie opcji **"Zakończ"**.
