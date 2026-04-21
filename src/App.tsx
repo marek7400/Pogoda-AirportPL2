@@ -35,7 +35,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 import { invoke } from '@tauri-apps/api/tauri';
-import { appWindow } from '@tauri-apps/api/window';
+import { appWindow, LogicalSize, LogicalPosition, currentMonitor } from '@tauri-apps/api/window';
 
 interface WeatherData {
   wind: string | null;
@@ -175,6 +175,49 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState<{ x: number, y: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [menuDirection, setMenuDirection] = useState<'up' | 'down'>('down');
+
+  useEffect(() => {
+    const handleExpansion = async () => {
+      if (!(window as any).__TAURI__) return;
+      
+      const isExpanded = isMenuOpen || showContextMenu;
+      
+      if (isExpanded) {
+        const factor = await appWindow.scaleFactor();
+        const pos = await appWindow.innerPosition();
+        const monitor = await currentMonitor();
+        
+        if (monitor) {
+          const screenH = monitor.size.height; // Physical
+          const distToBottom = screenH - (pos.y + 70 * factor);
+          
+          // If less than 550 logical pixels of space below, open UP
+          if (distToBottom < 550 * factor) {
+            setMenuDirection('up');
+            // Move window UP before expanding to make room for menu above
+            // We move it by the difference between expanded (600) and collapsed (70)
+            await appWindow.setPosition(new LogicalPosition(pos.x / factor, (pos.y / factor) - 530));
+            await appWindow.setSize(new LogicalSize(650, 600));
+          } else {
+            setMenuDirection('down');
+            await appWindow.setSize(new LogicalSize(650, 600));
+          }
+        }
+      } else {
+        // When closing, if we were UP, we need to move back DOWN
+        if (menuDirection === 'up') {
+          const pos = await appWindow.innerPosition();
+          const factor = await appWindow.scaleFactor();
+          await appWindow.setPosition(new LogicalPosition(pos.x / factor, (pos.y / factor) + 530));
+        }
+        await appWindow.setSize(new LogicalSize(650, 70));
+        setMenuDirection('down');
+      }
+    };
+    
+    handleExpansion();
+  }, [isMenuOpen, showContextMenu]);
 
   const WeatherIconComponent = ({ iconName, isDay }: { iconName: string, isDay: boolean }) => {
     const name = iconName.toLowerCase();
@@ -461,8 +504,11 @@ export default function App() {
 
   return (
     <div 
-      className="fixed inset-0 flex items-center justify-center font-sans w-full h-full select-none bg-transparent pointer-events-none"
-      onContextMenu={handleContextMenu}
+      className="fixed inset-0 flex items-center justify-center font-sans w-full h-full select-none bg-transparent"
+      onContextMenu={(e) => {
+        e.preventDefault();
+        handleContextMenu(e);
+      }}
     >
       <AnimatePresence mode="wait">
         {!isCollapsed ? (
@@ -473,7 +519,9 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             onMouseDown={startDragging}
-            className="relative bg-[#151619] text-white rounded-[12px] shadow-2xl ring-1 ring-white/10 flex items-center cursor-move z-10 p-[2px] gap-[2px] h-[68px] pointer-events-auto"
+            className={`relative bg-[#151619] text-white rounded-[12px] shadow-2xl ring-1 ring-white/10 flex items-center cursor-move z-10 p-[2px] gap-[2px] h-[68px] ${
+              menuDirection === 'up' ? 'mt-auto' : ''
+            }`}
           >
             {/* Top Gradient Line */}
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 opacity-50 rounded-t-[12px]" />
@@ -494,10 +542,12 @@ export default function App() {
                 {/* Airport Selection Menu */}
                 <AnimatePresence>
                   {isMenuOpen && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none p-4">
+                    <div className={`fixed inset-x-0 z-[100] flex items-center justify-center pointer-events-none p-4 ${
+                      menuDirection === 'up' ? 'bottom-[80px]' : 'top-[80px]'
+                    }`}>
                       {/* Dark Overlay with pointer events */}
                       <div 
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto" 
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto" 
                         onClick={() => setIsMenuOpen(false)} 
                       />
                       
@@ -627,11 +677,11 @@ export default function App() {
                       </div>
 
                       {/* Values Row */}
-                      <div className="flex items-center px-1">
+                      <div className="flex items-center px-1 -translate-y-[6px]">
                         {/* Temperature */}
                         <div className="flex items-center justify-center gap-3 w-[130px]">
                           {data.icon ? (
-                            <div className="relative w-12 h-12 flex items-center justify-center translate-x-[3px] -translate-y-[2px]">
+                            <div className="relative w-12 h-12 flex items-center justify-center translate-x-[3px] translate-y-0">
                               <WeatherIconComponent iconName={data.icon} isDay={data.is_day} />
                             </div>
                           ) : (
@@ -684,13 +734,13 @@ export default function App() {
               {/* App Close Button (Red X) - Aligned to Labels */}
               <button 
                 onClick={(e) => { e.stopPropagation(); closeApp(); }}
-                className="absolute top-[1px] w-5 h-5 flex items-center justify-center hover:bg-white/10 rounded-full transition-all cursor-pointer group/close shrink-0"
+                className="absolute top-[0px] w-5 h-5 flex items-center justify-center hover:bg-white/10 rounded-full transition-all cursor-pointer group/close shrink-0"
                 title="Zamknij Pogoda-AirportPL"
               >
                 <X className="w-3.5 h-3.5 text-red-500/70 group-hover/close:text-red-500 group-hover/close:scale-125" strokeWidth={3} />
               </button>
 
-              {/* Right Collapse Arrow - Vertically Centered */}
+              {/* Right Collapse Arrow - Vertically Centered (Same height as left arrow) */}
               <button 
                 onClick={(e) => { e.stopPropagation(); setCollapseSide('right'); setIsCollapsed(true); }}
                 className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn shrink-0"
@@ -710,7 +760,7 @@ export default function App() {
             transition={{ duration: 0.15 }}
             onClick={() => setIsCollapsed(false)}
             onMouseDown={startDragging}
-            className="relative bg-[#151619] text-emerald-400 shadow-2xl ring-1 ring-white/10 hover:bg-[#1C1E22] transition-colors cursor-pointer group flex items-center justify-center w-8 h-8 rounded-md z-50 pointer-events-auto"
+            className="relative bg-[#151619] text-emerald-400 shadow-2xl ring-1 ring-white/10 hover:bg-[#1C1E22] transition-colors cursor-pointer group flex items-center justify-center w-8 h-8 rounded-md z-50"
             title="Rozwiń"
           >
             {collapseSide === 'left' ? (

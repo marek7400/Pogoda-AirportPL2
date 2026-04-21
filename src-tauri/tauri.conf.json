@@ -47,15 +47,15 @@
       {
         "title": "Pogoda-AirportPL",
         "width": 650,
-        "height": 600,
+        "height": 70,
         "minWidth": 400,
-        "minHeight": 80,
+        "minHeight": 70,
         "center": true,
-        "resizable": true,
+        "resizable": false,
         "fullscreen": false,
         "transparent": true,
         "decorations": false,
-        "alwaysOnTop": false,
+        "alwaysOnTop": true,
         "skipTaskbar": true
       }
     ],
