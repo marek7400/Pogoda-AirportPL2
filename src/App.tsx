@@ -461,7 +461,7 @@ export default function App() {
 
   return (
     <div 
-      className="relative flex items-center justify-center font-sans w-full h-full select-none bg-transparent pointer-events-none"
+      className="fixed inset-0 flex items-center justify-center font-sans w-full h-full select-none bg-transparent pointer-events-none"
       onContextMenu={handleContextMenu}
     >
       <AnimatePresence mode="wait">
@@ -575,7 +575,7 @@ export default function App() {
               </div>
             </div>
             
-            <div className="flex items-center gap-[2px]">
+            <div className="flex items-center gap-[2px] pr-1">
               {/* Left Collapse Arrow */}
               <button 
                 onClick={(e) => { e.stopPropagation(); setCollapseSide('left'); setIsCollapsed(true); }}
@@ -624,6 +624,14 @@ export default function App() {
                           <Gauge className="w-3.5 h-3.5 text-cyan-400" />
                           <span className="text-[12px] font-sans font-bold tracking-wider text-[#D1D5DB] uppercase">CIŚNIENIE</span>
                         </div>
+                        {/* App Close Button (Red X) */}
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); closeApp(); }}
+                          className="w-5 h-5 ml-4 flex items-center justify-center hover:bg-white/10 rounded-full transition-all cursor-pointer group/close shrink-0"
+                          title="Zamknij Pogoda-AirportPL"
+                        >
+                          <X className="w-3.5 h-3.5 text-red-500/70 group-hover/close:text-red-500 group-hover/close:scale-125" strokeWidth={3} />
+                        </button>
                       </div>
 
                       {/* Values Row */}
@@ -664,6 +672,15 @@ export default function App() {
                             {data.pressure ?? '--'}<span className="text-xl text-white ml-0.5">hPa</span>
                           </div>
                         </div>
+
+                        {/* Right Collapse Arrow */}
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setCollapseSide('right'); setIsCollapsed(true); }}
+                          className="w-5 h-5 ml-4 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn shrink-0"
+                          title="Zwiń"
+                        >
+                          <ChevronRight className="w-5 h-5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
+                        </button>
                       </div>
                     </motion.div>
                     
@@ -678,17 +695,8 @@ export default function App() {
                 )}
               </AnimatePresence>
             </div>
-
-              {/* Right Collapse Arrow */}
-              <button 
-                onClick={(e) => { e.stopPropagation(); setCollapseSide('right'); setIsCollapsed(true); }}
-                className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn"
-                title="Zwiń"
-              >
-                <ChevronRight className="w-5 h-5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
-              </button>
-            </div>
-          </motion.div>
+          </div>
+        </motion.div>
         ) : (
           <motion.button 
             key="collapsed"
@@ -734,11 +742,12 @@ export default function App() {
               <button
                 onMouseDown={(e) => {
                   e.stopPropagation();
-                  closeApp();
+                  fetchWeather();
+                  setShowContextMenu(null);
                 }}
-                className="w-full px-4 py-3 text-left text-[11px] font-sans font-medium text-red-500 hover:bg-red-500/10 flex items-center gap-2 transition-colors cursor-pointer"
+                className="w-full px-4 py-3 text-left text-[11px] font-sans font-medium text-emerald-400 hover:bg-emerald-400/10 flex items-center gap-2 transition-colors cursor-pointer"
               >
-                Zamknij program
+                Odśwież dane
               </button>
             </motion.div>
           </>
