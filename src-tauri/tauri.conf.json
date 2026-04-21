@@ -55,7 +55,7 @@
         "fullscreen": false,
         "transparent": true,
         "decorations": false,
-        "alwaysOnTop": true,
+        "alwaysOnTop": false,
         "skipTaskbar": true
       }
     ],

@@ -527,113 +527,119 @@ export default function App() {
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 opacity-50 rounded-t-[12px]" />
             
             {/* Airport Sign (Bottom Left) & Location Picker */}
-            <div className="absolute bottom-[3px] left-[6px] flex items-center gap-1 z-[60]">
-              <div className="text-[12px] font-sans font-bold text-white pointer-events-none uppercase tracking-wider">
-                {selectedAirport}
-              </div>
-              <div className="relative">
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
-                  className={`p-0.5 rounded hover:bg-white/10 transition-colors cursor-pointer ${isMenuOpen ? 'text-white' : 'text-emerald-500'}`}
-                  title="Wybierz lokalizację"
-                >
-                  <MapPin className="w-3.5 h-3.5" />
-                </button>
-                {/* Airport Selection Menu */}
-                <AnimatePresence>
-                  {isMenuOpen && (
-                    <div className={`fixed inset-x-0 z-[100] flex items-center justify-center pointer-events-none p-4 ${
-                      menuDirection === 'up' ? 'bottom-[80px]' : 'top-[80px]'
-                    }`}>
-                      {/* Dark Overlay with pointer events */}
-                      <div 
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto" 
-                        onClick={() => setIsMenuOpen(false)} 
-                      />
-                      
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-[500px] h-fit max-h-[85vh] bg-[#1A1C1E] border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto cursor-default font-sans"
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onWheel={(e) => e.stopPropagation()}
-                      >
-                        {/* Header Box with Navigation and Close Button */}
-                        <div className="p-4 border-b border-white/5 bg-[#151619] flex items-center justify-between shrink-0">
-                          <div className="flex flex-col">
-                            <span className="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Wybierz lotnisko</span>
-                            <span className="text-[8px] text-zinc-500 font-bold uppercase tracking-[0.2em] mt-1 italic">Lista lotnisk i lądowisk PL</span>
-                          </div>
+            <div className="flex items-center gap-[0.5px]">
+              {/* Left Controls Column */}
+              <div className="flex flex-col items-center justify-center h-[64px] min-w-[32px] px-1 relative">
+                {/* Airport Selection Icon - Aligned to Labels */}
+                <div className="absolute top-[-2px] flex items-center justify-center">
+                  <div className="relative">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
+                      className={`p-1 rounded hover:bg-white/10 transition-colors cursor-pointer ${isMenuOpen ? 'text-white' : 'text-emerald-500'}`}
+                      title="Wybierz lokalizację"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                    </button>
+                    {/* Airport Selection Menu */}
+                    <AnimatePresence>
+                      {isMenuOpen && (
+                        <div className={`fixed inset-x-0 z-[100] flex items-center justify-center pointer-events-none p-4 ${
+                          menuDirection === 'up' ? 'bottom-[80px]' : 'top-[80px]'
+                        }`}>
+                          {/* Dark Overlay with pointer events */}
+                          <div 
+                            className="fixed inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto" 
+                            onClick={() => setIsMenuOpen(false)} 
+                          />
                           
-                          <div className="flex items-center gap-2">
-                            {/* Scroll Arrows */}
-                            <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/10">
-                              <button 
-                                onClick={(e) => { e.stopPropagation(); scrollMenu('up'); }}
-                                className="p-1.5 hover:bg-white/10 text-emerald-500 rounded-md transition-colors active:scale-95"
-                                title="Przewiń w górę"
-                              >
-                                <ChevronDown className="w-[18px] h-[18px] rotate-180" />
-                              </button>
-                              <button 
-                                onClick={(e) => { e.stopPropagation(); scrollMenu('down'); }}
-                                className="p-1.5 hover:bg-white/10 text-emerald-500 rounded-md transition-colors border-l border-white/10 active:scale-95"
-                                title="Przewiń w dół"
-                              >
-                                <ChevronDown className="w-[18px] h-[18px]" />
-                              </button>
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full max-w-[500px] h-fit max-h-[85vh] bg-[#1A1C1E] border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto cursor-default font-sans"
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onWheel={(e) => e.stopPropagation()}
+                          >
+                            {/* Header Box with Navigation and Close Button */}
+                            <div className="p-4 border-b border-white/5 bg-[#151619] flex items-center justify-between shrink-0">
+                              <div className="flex flex-col">
+                                <span className="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Wybierz lotnisko</span>
+                                <span className="text-[8px] text-zinc-500 font-bold uppercase tracking-[0.2em] mt-1 italic">Lista lotnisk i lądowisk PL</span>
+                              </div>
+                              
+                              <div className="flex items-center gap-2">
+                                {/* Scroll Arrows */}
+                                <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/10">
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); scrollMenu('up'); }}
+                                    className="p-1.5 hover:bg-white/10 text-emerald-500 rounded-md transition-colors active:scale-95"
+                                    title="Przewiń w górę"
+                                  >
+                                    <ChevronDown className="w-[18px] h-[18px] rotate-180" />
+                                  </button>
+                                  <button 
+                                    onClick={(e) => { e.stopPropagation(); scrollMenu('down'); }}
+                                    className="p-1.5 hover:bg-white/10 text-emerald-500 rounded-md transition-colors border-l border-white/10 active:scale-95"
+                                    title="Przewiń w dół"
+                                  >
+                                    <ChevronDown className="w-[18px] h-[18px]" />
+                                  </button>
+                                </div>
+                                
+                                {/* Big Close X Button */}
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); }}
+                                  className="p-[7px] bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all shadow-lg active:scale-90 flex items-center justify-center group"
+                                  title="Zamknij listę (X)"
+                                >
+                                  <X className="w-[18px] h-[18px] stroke-[3px]" />
+                                </button>
+                              </div>
                             </div>
-                            
-                            {/* Big Close X Button */}
-                            <button 
-                              onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); }}
-                              className="p-[7px] bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all shadow-lg active:scale-90 flex items-center justify-center group"
-                              title="Zamknij listę (X)"
+                            <div 
+                              ref={scrollRef}
+                              className="flex-1 overflow-y-auto p-2 scroll-smooth airport-scrollbar no-scrollbar"
+                              onScroll={(e) => e.stopPropagation()}
                             >
-                              <X className="w-[18px] h-[18px] stroke-[3px]" />
-                            </button>
-                          </div>
+                              {AIRPORTS.flatMap(group => group.airports).map((airport) => (
+                                <button
+                                  key={airport.code}
+                                  onClick={() => {
+                                    setSelectedAirport(airport.code);
+                                    setIsMenuOpen(false);
+                                  }}
+                                  className={`airport-item w-full text-left px-5 py-[2px] rounded-xl transition-all flex items-center justify-between group ${
+                                    selectedAirport === airport.code 
+                                      ? 'bg-emerald-500/10 text-emerald-400 font-bold underline decoration-2' 
+                                      : 'hover:bg-white/5 text-zinc-400 hover:text-white'
+                                  }`}
+                                >
+                                  <span className="text-[22px] font-medium truncate pr-4">{airport.name}</span>
+                                  <span className="text-[18px] font-mono opacity-50 group-hover:opacity-100 shrink-0">{airport.code}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </motion.div>
                         </div>
-                        <div 
-                          ref={scrollRef}
-                          className="flex-1 overflow-y-auto p-2 scroll-smooth airport-scrollbar no-scrollbar"
-                          onScroll={(e) => e.stopPropagation()}
-                        >
-                          {AIRPORTS.flatMap(group => group.airports).map((airport) => (
-                            <button
-                              key={airport.code}
-                              onClick={() => {
-                                setSelectedAirport(airport.code);
-                                setIsMenuOpen(false);
-                              }}
-                              className={`airport-item w-full text-left px-5 py-[2px] rounded-xl transition-all flex items-center justify-between group ${
-                                selectedAirport === airport.code 
-                                  ? 'bg-emerald-500/10 text-emerald-400 font-bold underline decoration-2' 
-                                  : 'hover:bg-white/5 text-zinc-400 hover:text-white'
-                              }`}
-                            >
-                              <span className="text-[22px] font-medium truncate pr-4">{airport.name}</span>
-                              <span className="text-[18px] font-mono opacity-50 group-hover:opacity-100 shrink-0">{airport.code}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    </div>
-                  )}
-                </AnimatePresence>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                {/* Left Collapse Arrow - Centered Height */}
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setCollapseSide('left'); setIsCollapsed(true); }}
+                  className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn"
+                  title="Zwiń"
+                >
+                  <ChevronLeft className="w-5 h-5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
+                </button>
+
+                {/* Airport Sign (Bottom Left) - Restored */}
+                <div className="absolute bottom-[3px] left-[10px] text-[12px] font-sans font-bold text-white pointer-events-none uppercase tracking-wider">
+                  {selectedAirport}
+                </div>
               </div>
-            </div>
-            
-            <div className="flex items-center gap-[2px] pr-1">
-              {/* Left Collapse Arrow */}
-              <button 
-                onClick={(e) => { e.stopPropagation(); setCollapseSide('left'); setIsCollapsed(true); }}
-                className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn"
-                title="Zwiń"
-              >
-                <ChevronLeft className="w-5 h-5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
-              </button>
 
               {/* Weather Content */}
             <div className="flex flex-col items-center min-h-[64px]">
@@ -659,7 +665,7 @@ export default function App() {
                       {/* Labels Row */}
                       <div className="flex items-center mb-0 px-1">
                         <div className="flex items-center gap-1.5 w-[130px]">
-                          <Thermometer className="w-3.5 h-3.5 text-orange-500" />
+                          <Thermometer className="w-3.5 h-3.5 text-red-500" />
                           <span className="text-[12px] font-sans font-bold tracking-wider text-[#D1D5DB] uppercase">TEMPERATURA</span>
                         </div>
                         <div className="flex items-center justify-center gap-1.5 w-[84px]">
@@ -671,7 +677,7 @@ export default function App() {
                           <span className="text-[12px] font-sans font-bold tracking-wider text-[#D1D5DB] uppercase">WILG.</span>
                         </div>
                         <div className="flex items-center justify-center gap-1.5 w-[94px] border-l border-white/10 ml-1 pl-1">
-                          <Gauge className="w-3.5 h-3.5 text-cyan-400" />
+                          <Gauge className="w-3.5 h-3.5 text-purple-400" />
                           <span className="text-[12px] font-sans font-bold tracking-wider text-[#D1D5DB] uppercase">CIŚNIENIE</span>
                         </div>
                       </div>
