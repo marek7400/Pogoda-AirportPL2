@@ -17,14 +17,14 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
     *   **Wilgotność**: Aktualna wilgotność powietrza.
     *   **Ciśnienie**: Ciśnienie atmosferyczne (QNH).
     *   **Zjawiska**: Opisy stanów pogody (np. deszcz, mgła, burza).
-*   **Czas odświeżania**: Dane są automatycznie sprawdzane i aktualizowane co **25 minut**, zgodnie z typowym cyklem publikacji depesz METAR.
+*   **Czas odświeżania**: Dane są automatycznie sprawdzane i aktualizowane co **30 minut**, zgodnie z typowym cyklem publikacji depesz METAR.
 
 ## 🌐 Brak połączenia internetowego
 
 *   Aplikacja posiada inteligentny system cache. W przypadku braku internetu:
     *   Wyświetla ostatnie pomyślnie pobrane dane.
     *   Informuje o starości danych poprzez komunikat "DANE ARCHIWALNE" oraz wyblaknięcie interfejsu.
-    *   Automatycznie wznawia aktualizację po przywróceniu połączenia.
+    *   Automatycznie wznawia aktualizację po przywróceniu połączenia i starcie programu.
 
 ## 🛠️ Funkcje użytkowe
 
