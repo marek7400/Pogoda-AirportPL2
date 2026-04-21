@@ -37,12 +37,3 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
     *   Zamknięcie okna przyciskiem "X" lub wybranie opcji z menu kontekstowego ukrywa aplikację do traya, skąd można ją szybko przywrócić.
 *   **Zamykanie**:
     *   Pełne wyjście z aplikacji możliwe jest poprzez kliknięcie prawym przyciskiem myszy na ikonkę w zasobniku systemowym (Tray) i wybranie opcji **"Zakończ"**.
-
-## 🎨 Design i Stylistyka
-
-*   Nowoczesny, ciemny motyw z efektem szkła (glassmorphism).
-*   Kolorowe akcenty ikon (Czerwona Temperatura, Jasnofioletowe Ciśnienie) ułatwiające szybki odczyt danych.
-*   Płynne animacje przejść i zwijania interfejsu (Framer Motion).
-
----
-*Stworzone dla miłośników lotnictwa i osób potrzebujących precyzyjnej informacji pogodowej.*
