@@ -27,6 +27,7 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
     *   Wyświetla ostatnie pomyślnie pobrane dane.
     *   Informuje o starości danych poprzez komunikat "DANE ARCHIWALNE" oraz wyblaknięcie interfejsu.
     *   Automatycznie wznawia aktualizację po przywróceniu połączenia i starcie programu.
+    *   Jeżeli nie ma danych kliknij prawym przyciskiem myszki na okno programu i z menu wybierz 'Odśwież dane'.
 
 ## 🛠️ Funkcje użytkowe
 
