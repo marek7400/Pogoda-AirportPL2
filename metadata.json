@@ -1,0 +1,6 @@
+{
+  "name": "Pogoda-AirportPL",
+  "description": "Zaawansowany widżet pogodowy dla polskich lotnisk i lądowisk. Pobiera dane METAR z aviationweather.gov lub dane lokalne z Open-Meteo jako fallback dla mniejszych stacji.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

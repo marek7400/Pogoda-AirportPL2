@@ -1,0 +1,67 @@
+{
+  "name": "pogoda-airport-pl",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Weather widget for Polish airports using METAR and Open-Meteo fallback",
+  "author": "marek7400",
+  "productName": "Pogoda-AirportPL",
+  "main": "electron-main.cjs",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "electron": "electron .",
+    "tauri": "tauri",
+    "start": "node server.ts",
+    "build": "vite build",
+    "dist": "tauri build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^1.29.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@tauri-apps/api": "^1.6.0",
+    "@tauri-apps/cli": "^1.6.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "axios": "^1.15.0",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "electron-store": "^11.0.2",
+    "express": "^4.21.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "electron-builder": "^25.1.8",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "build": {
+    "appId": "com.krakow.weather",
+    "files": [
+      "dist/**/*",
+      "electron-main.cjs",
+      "preload.cjs",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "publish": null
+    },
+    "directories": {
+      "output": "dist-electron"
+    },
+    "asar": true
+  }
+}
