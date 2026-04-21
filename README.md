@@ -31,7 +31,7 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
 ## 🛠️ Funkcje użytkowe
 
 *   **Wybór lotniska**: 
-    *   Kliknięcie ikonki pinezki (widoczna po lewej stronie, nad strzałką) otwiera interaktywne menu.
+    *   Kliknięcie zielonej ikonki pinezki (widoczna po lewej stronie, nad strzałką) otwiera interaktywne menu.
     *   Możliwość wyboru spośród części polskich lotnisk pogrupowanych miastami (np. EPKK Kraków, EPWA Warszawa-Chopin, EPMO Modlin).
     *   Wybór jest zapamiętywany po ponownym uruchomieniu aplikacji.
        
