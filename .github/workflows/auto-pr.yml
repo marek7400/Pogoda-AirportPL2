@@ -1,18 +1,17 @@
-name: Auto Build and PR
+name: Build Check & Auto PR
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - 'update/**'
-      - 'feature/**'
-      - 'dev/**'
+      - '**' # Triggers on ALL branches including main
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  build-and-pr:
+  build-and-verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -30,18 +29,16 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Create Pull Request
+      - name: Create Pull Request (only if NOT on main)
+        if: github.ref_name != 'main'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Automatyczna aktualizacja z AI Studio Build"
-          title: "Aktualizacja: ${{ github.ref_name }}"
+          title: "Gotowa paczka zmian z AI Studio"
           body: |
-            Ten Pull Request został wygenerowany automatycznie po eksporcie z AI Studio Build.
+            Ten PR został wygenerowany po wykryciu zmian na gałęzi `${{ github.ref_name }}`.
             
-            **Zmiany w tej wersji:**
-            - Automatyczna weryfikacja builda: PASSED ✅
-            - Gałąź źródłowa: `${{ github.ref_name }}`
+            **Status Builda:** SUCCEEDED ✅
           branch: ${{ github.ref_name }}
           base: main
-          delete-branch: false
