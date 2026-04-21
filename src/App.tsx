@@ -788,16 +788,16 @@ export default function App() {
               onMouseDown={() => setShowContextMenu(null)}
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
               style={{ 
                 position: 'fixed',
-                top: showContextMenu.y,
-                left: showContextMenu.x,
+                top: '50%',
+                left: '50%',
                 zIndex: 9999 
               }}
-              className="bg-[#1C1E22] border border-white/10 rounded-lg shadow-xl py-1 min-w-[150px] pointer-events-auto"
+              className="bg-[#1C1E22]/95 backdrop-blur-md border border-white/20 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.7)] py-1 min-w-[200px] pointer-events-auto overflow-hidden"
             >
               <button
                 onMouseDown={(e) => {
@@ -805,8 +805,9 @@ export default function App() {
                   fetchWeather();
                   setShowContextMenu(null);
                 }}
-                className="w-full px-4 py-3 text-left text-[11px] font-sans font-medium text-emerald-400 hover:bg-emerald-400/10 flex items-center gap-2 transition-colors cursor-pointer"
+                className="w-full px-6 py-4 text-center text-[13px] font-sans font-bold text-white hover:bg-white/10 flex items-center justify-center gap-3 transition-all cursor-pointer uppercase tracking-[0.2em]"
               >
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                 Odśwież dane
               </button>
             </motion.div>
