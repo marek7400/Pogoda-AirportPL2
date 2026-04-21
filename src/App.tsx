@@ -624,14 +624,6 @@ export default function App() {
                           <Gauge className="w-3.5 h-3.5 text-cyan-400" />
                           <span className="text-[12px] font-sans font-bold tracking-wider text-[#D1D5DB] uppercase">CIŚNIENIE</span>
                         </div>
-                        {/* App Close Button (Red X) */}
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); closeApp(); }}
-                          className="w-5 h-5 ml-4 flex items-center justify-center hover:bg-white/10 rounded-full transition-all cursor-pointer group/close shrink-0"
-                          title="Zamknij Pogoda-AirportPL"
-                        >
-                          <X className="w-3.5 h-3.5 text-red-500/70 group-hover/close:text-red-500 group-hover/close:scale-125" strokeWidth={3} />
-                        </button>
                       </div>
 
                       {/* Values Row */}
@@ -639,7 +631,7 @@ export default function App() {
                         {/* Temperature */}
                         <div className="flex items-center justify-center gap-3 w-[130px]">
                           {data.icon ? (
-                            <div className="relative w-12 h-12 flex items-center justify-center">
+                            <div className="relative w-12 h-12 flex items-center justify-center translate-x-[3px] -translate-y-[2px]">
                               <WeatherIconComponent iconName={data.icon} isDay={data.is_day} />
                             </div>
                           ) : (
@@ -672,15 +664,6 @@ export default function App() {
                             {data.pressure ?? '--'}<span className="text-xl text-white ml-0.5">hPa</span>
                           </div>
                         </div>
-
-                        {/* Right Collapse Arrow */}
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setCollapseSide('right'); setIsCollapsed(true); }}
-                          className="w-5 h-5 ml-4 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn shrink-0"
-                          title="Zwiń"
-                        >
-                          <ChevronRight className="w-5 h-5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
-                        </button>
                       </div>
                     </motion.div>
                     
@@ -694,6 +677,27 @@ export default function App() {
                   <div className="h-[60px] flex items-center px-10 text-white text-[16px] font-bold tracking-[0.2em] uppercase">Pobieranie danych...</div>
                 )}
               </AnimatePresence>
+            </div>
+
+            {/* Right Controls Column */}
+            <div className="flex flex-col items-center justify-center h-[64px] min-w-[32px] pr-1.5 relative">
+              {/* App Close Button (Red X) - Aligned to Labels */}
+              <button 
+                onClick={(e) => { e.stopPropagation(); closeApp(); }}
+                className="absolute top-[1px] w-5 h-5 flex items-center justify-center hover:bg-white/10 rounded-full transition-all cursor-pointer group/close shrink-0"
+                title="Zamknij Pogoda-AirportPL"
+              >
+                <X className="w-3.5 h-3.5 text-red-500/70 group-hover/close:text-red-500 group-hover/close:scale-125" strokeWidth={3} />
+              </button>
+
+              {/* Right Collapse Arrow - Vertically Centered */}
+              <button 
+                onClick={(e) => { e.stopPropagation(); setCollapseSide('right'); setIsCollapsed(true); }}
+                className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-md transition-colors cursor-pointer group/btn shrink-0"
+                title="Zwiń"
+              >
+                <ChevronRight className="w-5 h-5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
+              </button>
             </div>
           </div>
         </motion.div>
