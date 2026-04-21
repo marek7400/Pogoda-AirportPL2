@@ -55,8 +55,6 @@ Program łączy się z zewnętrznym serwerem, aby pobrać pogodę. Dla algorytmu
 Plik jest czysty. Gdyby był naprawdę zainfekowany, wynik wynosiłby co najmniej 15-20/72, a Microsoft Defender natychmiast skasowałby go z dysku po próbie uruchomienia.
 Trapmine jest znany wśród programistów z tego, że bardzo często flaguje nowo skompilowane, niepodpisane aplikacje. 
 
-*
-
 # Uruchamianie przy każdym starcie komputera:
 
 Skopiuj exe do dowolnego folderu.
