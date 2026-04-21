@@ -2,6 +2,8 @@
 
 Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe bezpośrednio z polskich lotnisk (depesze METAR). Zaprojektowana tak, aby nie zajmować miejsca na ekranie i oferować natychmiastowy wgląd w warunki atmosferyczne.
 
+<img width="600" height="83" alt="1" src="https://github.com/user-attachments/assets/bd0b11c3-8007-49f0-a821-260fbf8e69ea" />
+
 ## 🚀 Główne możliwości
 
 *   **Precyzyjne dane lotnicze**: Aplikacja korzysta z oficjalnych depesz METAR, co gwarantuje najwyższą dokładność parametrów pogodowych.
@@ -32,6 +34,10 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
     *   Kliknięcie ikonki pinezki (widoczna po lewej stronie, nad strzałką) otwiera interaktywne menu.
     *   Możliwość wyboru spośród części polskich lotnisk pogrupowanych miastami (np. EPKK Kraków, EPWA Warszawa-Chopin, EPMO Modlin).
     *   Wybór jest zapamiętywany po ponownym uruchomieniu aplikacji.
+    *   
+ <img width="494" height="477" alt="2" src="https://github.com/user-attachments/assets/07ce1ea2-4425-43d2-bb8d-3af3f218e0b2" />
+
+   
 *   **Minimalizacja i Tray**:
     *   Aplikacja posiada ikonkę w zasobniku systemowym (Tray) przy zegarze.
     *   Zamknięcie okna przyciskiem "X" lub wybranie opcji z menu kontekstowego ukrywa aplikację do traya, skąd można ją szybko przywrócić.
