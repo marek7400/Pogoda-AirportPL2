@@ -461,7 +461,7 @@ export default function App() {
 
   return (
     <div 
-      className="relative flex items-center justify-center font-sans w-full h-full select-none bg-transparent"
+      className="relative flex items-center justify-center font-sans w-full h-full select-none bg-transparent pointer-events-none"
       onContextMenu={handleContextMenu}
     >
       <AnimatePresence mode="wait">
@@ -473,7 +473,7 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             onMouseDown={startDragging}
-            className="relative bg-[#151619] text-white rounded-[12px] shadow-2xl ring-1 ring-white/10 flex items-center cursor-move z-10 p-[2px] gap-[2px] h-[68px]"
+            className="relative bg-[#151619] text-white rounded-[12px] shadow-2xl ring-1 ring-white/10 flex items-center cursor-move z-10 p-[2px] gap-[2px] h-[68px] pointer-events-auto"
           >
             {/* Top Gradient Line */}
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 opacity-50 rounded-t-[12px]" />
@@ -698,7 +698,7 @@ export default function App() {
             transition={{ duration: 0.15 }}
             onClick={() => setIsCollapsed(false)}
             onMouseDown={startDragging}
-            className="relative bg-[#151619] text-emerald-400 shadow-2xl ring-1 ring-white/10 hover:bg-[#1C1E22] transition-colors cursor-pointer group flex items-center justify-center w-8 h-8 rounded-md z-50"
+            className="relative bg-[#151619] text-emerald-400 shadow-2xl ring-1 ring-white/10 hover:bg-[#1C1E22] transition-colors cursor-pointer group flex items-center justify-center w-8 h-8 rounded-md z-50 pointer-events-auto"
             title="Rozwiń"
           >
             {collapseSide === 'left' ? (
@@ -729,7 +729,7 @@ export default function App() {
                 left: showContextMenu.x,
                 zIndex: 9999 
               }}
-              className="bg-[#1C1E22] border border-white/10 rounded-lg shadow-xl py-1 min-w-[150px]"
+              className="bg-[#1C1E22] border border-white/10 rounded-lg shadow-xl py-1 min-w-[150px] pointer-events-auto"
             >
               <button
                 onMouseDown={(e) => {
