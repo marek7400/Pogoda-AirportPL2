@@ -181,7 +181,7 @@ export default function App() {
     const handleExpansion = async () => {
       if (!(window as any).__TAURI__) return;
       
-      const isExpanded = isMenuOpen || showContextMenu;
+      const isExpanded = isMenuOpen;
       
       if (isExpanded) {
         const factor = await appWindow.scaleFactor();
@@ -464,6 +464,9 @@ export default function App() {
     // Initial fetch on mount
     fetchWeather();
     
+    // Refresh when internet connection is restored
+    window.addEventListener('online', fetchWeather);
+    
     // Aligns to next 00 or 30 minute mark
     const now = new Date();
     const minutes = now.getMinutes();
@@ -477,6 +480,7 @@ export default function App() {
     }, msToNextAligned);
 
     return () => {
+      window.removeEventListener('online', fetchWeather);
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
     };
@@ -519,9 +523,7 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             onMouseDown={startDragging}
-            className={`relative bg-[#151619] text-white rounded-[12px] shadow-2xl ring-1 ring-white/10 flex items-center cursor-move z-10 p-[2px] gap-[2px] h-[68px] ${
-              menuDirection === 'up' ? 'mt-auto' : ''
-            }`}
+            className={`relative bg-[#151619] text-white rounded-[12px] shadow-2xl ring-1 ring-white/10 flex items-center cursor-move z-10 p-[2px] gap-[2px] h-[68px] transition-all`}
           >
             {/* Top Gradient Line */}
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 opacity-50 rounded-t-[12px]" />
@@ -760,9 +762,9 @@ export default function App() {
         ) : (
           <motion.button 
             key="collapsed"
-            initial={{ opacity: 0, x: collapseSide === 'left' ? -216 : 216, y: 0 }}
-            animate={{ opacity: 1, x: collapseSide === 'left' ? -216 : 216, y: 0 }}
-            exit={{ opacity: 0, x: collapseSide === 'left' ? -216 : 216, y: 0 }}
+            initial={{ opacity: 0, x: collapseSide === 'left' ? -212 : 212, y: 0 }}
+            animate={{ opacity: 1, x: collapseSide === 'left' ? -212 : 212, y: 0 }}
+            exit={{ opacity: 0, x: collapseSide === 'left' ? -212 : 212, y: 0 }}
             transition={{ duration: 0.15 }}
             onClick={() => setIsCollapsed(false)}
             onMouseDown={startDragging}
