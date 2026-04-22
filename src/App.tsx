@@ -736,8 +736,16 @@ export default function App() {
 
                         {/* Wind */}
                         <div className="flex items-center justify-center gap-2 w-[84px]">
-                          <div className="text-3xl font-mono font-medium tracking-tighter">
-                            {data.wind ?? '--'}<span className="text-base text-white ml-0.5">km/h</span>
+                          <div className="flex items-center gap-1 translate-x-[5px]">
+                            <div className="text-3xl font-mono font-medium tracking-tighter">
+                              {data.wind ?? '--'}<span className="text-base text-white ml-0.5">km/h</span>
+                            </div>
+                            {data.wind_dir !== null && (
+                              <MoveDown 
+                                className="w-5 h-5 text-blue-300" 
+                                style={{ transform: `rotate(${data.wind_dir}deg)`, strokeWidth: 3 }}
+                              />
+                            )}
                           </div>
                         </div>
 
