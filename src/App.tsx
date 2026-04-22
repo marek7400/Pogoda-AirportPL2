@@ -422,50 +422,81 @@ export default function App() {
 
   const fetchWeather = useCallback(async () => {
     if (!selectedAirport) return;
-    setLoading(true);
-    setIsRefreshing(true);
-    try {
-      let result: WeatherData;
-      if ((window as any).__TAURI__) {
-        result = await invoke<WeatherData>('get_weather', { icaoCode: selectedAirport });
-      } else {
-        // Mock data for Browser Preview - Immediate
-        result = {
-          temperature: (Math.floor(Math.random() * 20)).toString(),
-          wind: (Math.floor(Math.random() * 30)).toString(),
-          humidity: (Math.floor(Math.random() * 40) + 40).toString(),
-          pressure: "1013",
-          wind_dir: 110,
-          phenomena: null,
-          icon: "sunny", // Using a valid icon for testing
-          is_day: true,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
+    
+    const tryFetch = async (remainingAttempts: number): Promise<boolean> => {
+      setLoading(true);
+      setIsRefreshing(true);
+      try {
+        let result: WeatherData;
+        if ((window as any).__TAURI__) {
+          result = await invoke<WeatherData>('get_weather', { icaoCode: selectedAirport });
+        } else {
+          // Mock data for Browser Preview
+          await new Promise(r => setTimeout(r, 1000));
+          result = {
+            temperature: (Math.floor(Math.random() * 20)).toString(),
+            wind: (Math.floor(Math.random() * 30)).toString(),
+            humidity: (Math.floor(Math.random() * 40) + 40).toString(),
+            pressure: "1013",
+            wind_dir: 110,
+            phenomena: null,
+            icon: "sunny",
+            is_day: true,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+        }
+        
+        setData(result);
+        localStorage.setItem('weatherData', JSON.stringify(result));
+        localStorage.setItem('selected_icao', selectedAirport);
+        setError(null);
+        setIsStale(false);
+        return true;
+      } catch (err: any) {
+        if (remainingAttempts > 0) {
+          // Exponential backoff or simple delay
+          const delay = (4 - remainingAttempts) * 5000; // 5s, 10s, 15s
+          await new Promise(r => setTimeout(r, delay));
+          return tryFetch(remainingAttempts - 1);
+        }
+        
+        // Final failure
+        setData(null);
+        const errorMessage = typeof err === 'string' ? err : (err.message || JSON.stringify(err));
+        setError(errorMessage || 'Błąd połączenia z serwerem');
+        setIsStale(false);
+        return false;
+      } finally {
+        if (remainingAttempts === 0 || !error) {
+          setLoading(false);
+          setTimeout(() => setIsRefreshing(false), 200);
+        }
       }
-      
-      setData(result);
-      localStorage.setItem('weatherData', JSON.stringify(result));
-      localStorage.setItem('selected_icao', selectedAirport);
-      setError(null);
-      setIsStale(false);
-    } catch (err: any) {
-      setData(null);
-      const errorMessage = typeof err === 'string' ? err : (err.message || JSON.stringify(err));
-      setError(errorMessage || 'Błąd połączenia z serwerem');
-      setIsStale(false);
-    } finally {
-      setLoading(false);
-      // Small delay to ensure smooth transition
-      setTimeout(() => setIsRefreshing(false), 200);
-    }
-  }, [selectedAirport]); // Correctly depends on selectedAirport
+    };
+
+    await tryFetch(3); // Start with 3 retries
+  }, [selectedAirport, error]); // Correctly depends on selectedAirport
 
   useEffect(() => {
     // Initial fetch on mount
     fetchWeather();
     
-    // Refresh when internet connection is restored
-    window.addEventListener('online', fetchWeather);
+    // Refresh when internet connection is restored with a small delay for DNS/DHCP
+    const handleOnline = () => {
+      setTimeout(fetchWeather, 5000);
+    };
+    window.addEventListener('online', handleOnline);
+
+    // Detect wake-up from sleep by monitoring clock jumps
+    let lastTime = Date.now();
+    const wakeCheckInterval = setInterval(() => {
+      const currentTime = Date.now();
+      if (currentTime - lastTime > 60000) { // Jump > 1 min
+        console.log("System wake-up detected");
+        setTimeout(fetchWeather, 5000);
+      }
+      lastTime = currentTime;
+    }, 10000);
     
     // Aligns to next 00 or 30 minute mark
     const now = new Date();
@@ -480,7 +511,8 @@ export default function App() {
     }, msToNextAligned);
 
     return () => {
-      window.removeEventListener('online', fetchWeather);
+      window.removeEventListener('online', handleOnline);
+      clearInterval(wakeCheckInterval);
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
     };

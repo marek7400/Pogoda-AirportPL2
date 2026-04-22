@@ -22,13 +22,13 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
     *   **Zjawiska**: Opisy stanów pogody (np. deszcz, mgła, burza).
 *   **Czas odświeżania**: Dane są automatycznie sprawdzane i aktualizowane co **30 minut**, zgodnie z typowym cyklem publikacji depesz METAR.
 
-## 🌐 Brak połączenia internetowego
-
-*   Aplikacja posiada inteligentny system cache. W przypadku braku internetu:
-    *   Wyświetla ostatnie pomyślnie pobrane dane.
-    *   Informuje o starości danych poprzez komunikat "DANE ARCHIWALNE" oraz wyblaknięcie interfejsu.
-    *    Aktualizacja po starcie programu.
-    *   Jeżeli nie ma danych kliknij prawym przyciskiem myszki na okno programu i z menu wybierz 'Odśwież dane'.
+## 🌐 Brak połączenia i stabilność
+*   Aplikacja posiada inteligentny system cache oraz autoodzyskiwania. W przypadku problemów:
+    *   **Automatyczne próby**: Aplikacja podejmuje do 3 prób odświeżenia z rosnącym czasem oczekiwania (5s, 10s, 15s), co daje systemowi czas na połączenie z siecią po wybudzeniu.
+    *   **Detekcja wybudzenia**: Program automatycznie odświeża dane po wykryciu wybudzenia komputera z uśpienia.
+    *   **Sygnał Online**: Natychmiastowa aktualizacja po przywróceniu dostępu do internetu.
+    *   **Dane archiwalne**: W razie permanentnego braku sieci wyświetla ostatnie pomyślnie pobrane dane (wyblakły interfejs + komunikat).
+    *   **Ręczne odświeżanie**: Zawsze możesz kliknąć PPM na pasek i wybrać 'Odśwież dane'.
 
 ## 🛠️ Funkcje użytkowe
 
@@ -56,8 +56,6 @@ Program łączy się z zewnętrznym serwerem, aby pobrać pogodę. Dla algorytmu
 # Podsumowanie:
 Plik jest czysty. Gdyby był naprawdę zainfekowany, wynik wynosiłby co najmniej 15-20/72, a Microsoft Defender natychmiast skasowałby go z dysku po próbie uruchomienia.
 Trapmine jest znany wśród programistów z tego, że bardzo często flaguje nowo skompilowane, niepodpisane aplikacje. 
-
-
 
 # Uruchamianie przy każdym starcie komputera:
 
