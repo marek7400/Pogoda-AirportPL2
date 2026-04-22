@@ -27,7 +27,7 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
 *   Aplikacja posiada inteligentny system cache. W przypadku braku internetu:
     *   Wyświetla ostatnie pomyślnie pobrane dane.
     *   Informuje o starości danych poprzez komunikat "DANE ARCHIWALNE" oraz wyblaknięcie interfejsu.
-    *   Automatycznie wznawia aktualizację po przywróceniu połączenia i starcie programu.
+    *    Aktualizacja po starcie programu.
     *   Jeżeli nie ma danych kliknij prawym przyciskiem myszki na okno programu i z menu wybierz 'Odśwież dane'.
 
 ## 🛠️ Funkcje użytkowe
