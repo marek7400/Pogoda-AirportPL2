@@ -36,6 +36,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import { invoke } from '@tauri-apps/api/tauri';
 import { appWindow, LogicalSize, LogicalPosition, currentMonitor } from '@tauri-apps/api/window';
+import { relaunch } from '@tauri-apps/api/process';
 
 interface WeatherData {
   wind: string | null;
@@ -481,22 +482,45 @@ export default function App() {
     // Initial fetch on mount
     fetchWeather();
     
+    // Detect wake-up or connection changes by monitoring clock and online status
+    let lastTime = Date.now();
+    let wasOffline = !navigator.onLine;
+
+    const healthCheckInterval = setInterval(() => {
+      const currentTime = Date.now();
+      const isOnline = navigator.onLine;
+
+      // 1. Wake up detection (clock jump > 1 min)
+      if (currentTime - lastTime > 60000) {
+        console.log("System wake-up detected - restarting app");
+        if ((window as any).__TAURI__) {
+          relaunch().catch(err => console.error("Failed to relaunch:", err));
+        }
+      }
+
+      // 2. Recovery from offline state
+      if (wasOffline && isOnline) {
+        console.log("Network restored, fetching data...");
+        if ((window as any).__TAURI__) {
+          appWindow.setSkipTaskbar(true).catch(() => {});
+        }
+        setTimeout(fetchWeather, 3000);
+      }
+
+      // 3. Periodic retry if in error state and online
+      if (error && isOnline && currentTime % 60000 < 10000) { // roughly every minute
+         fetchWeather();
+      }
+
+      lastTime = currentTime;
+      wasOffline = !isOnline;
+    }, 10000);
+
     // Refresh when internet connection is restored with a small delay for DNS/DHCP
     const handleOnline = () => {
       setTimeout(fetchWeather, 5000);
     };
     window.addEventListener('online', handleOnline);
-
-    // Detect wake-up from sleep by monitoring clock jumps
-    let lastTime = Date.now();
-    const wakeCheckInterval = setInterval(() => {
-      const currentTime = Date.now();
-      if (currentTime - lastTime > 60000) { // Jump > 1 min
-        console.log("System wake-up detected");
-        setTimeout(fetchWeather, 5000);
-      }
-      lastTime = currentTime;
-    }, 10000);
     
     // Aligns to next 00 or 30 minute mark + 2.5 minute buffer to allow for METAR propagation
     const now = new Date();
@@ -521,7 +545,7 @@ export default function App() {
 
     return () => {
       window.removeEventListener('online', handleOnline);
-      clearInterval(wakeCheckInterval);
+      clearInterval(healthCheckInterval);
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
     };
@@ -693,8 +717,10 @@ export default function App() {
                       <AlertCircle className="w-5 h-5" />
                       <span>BłAD POBIERANIA DANYCH</span>
                     </div>
-                    <p className="text-[14px] text-white font-mono text-center max-w-[360px] leading-snug font-bold">
-                      {error}
+                    <p className="text-[13px] text-white font-mono text-center max-w-[340px] leading-tight font-bold line-clamp-2 overflow-hidden">
+                      {error.includes('error sending request for url') 
+                        ? 'Błąd połączenia z serwerem danych (brak odpowiedzi)' 
+                        : error}
                     </p>
                   </div>
                 ) : data ? (

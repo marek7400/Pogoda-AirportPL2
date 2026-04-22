@@ -5,6 +5,7 @@
 
 use serde::{Serialize, Deserialize};
 use regex::Regex;
+use tauri::Manager;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WeatherData {
@@ -219,6 +220,30 @@ fn main() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_window_state::Builder::default().build())
+        .plugin(tauri_plugin_single_instance::init(|_app, _argv, _cwd| {
+            // Already running - just let the first instance continue
+            // Removed show() and set_focus() to prevent taskbar interference
+        }))
+        .setup(|app| {
+            // Force skip taskbar on startup and monitor for events that might reset it
+            if let Some(window) = app.get_window("main") {
+                let w = window.clone();
+                window.on_window_event(move |event| {
+                    match event {
+                        tauri::WindowEvent::Focused(_) | 
+                        tauri::WindowEvent::ScaleFactorChanged { .. } |
+                        tauri::WindowEvent::Resized(_) |
+                        tauri::WindowEvent::Moved(_) => {
+                            // Re-apply skip taskbar whenever window state changes significantly
+                            let _ = w.set_skip_taskbar(true);
+                        }
+                        _ => {}
+                    }
+                });
+                let _ = window.set_skip_taskbar(true);
+            }
+            Ok(())
+        })
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => {

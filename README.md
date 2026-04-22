@@ -4,6 +4,7 @@
 Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe bezpośrednio z polskich lotnisk (depesze METAR). Zaprojektowana tak, aby nie zajmować miejsca na ekranie i oferować natychmiastowy wgląd w warunki atmosferyczne.
 
 <img width="1032" height="226" alt="1" src="https://github.com/user-attachments/assets/9baa3ee0-7625-43d5-bc71-0deaaf0c26be" />
+
 ## 🚀 Główne możliwości
 
 *   **Precyzyjne dane lotnicze**: Aplikacja korzysta z oficjalnych depesz METAR, co gwarantuje najwyższą dokładność parametrów pogodowych.
@@ -19,7 +20,7 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
     *   **Wilgotność**: Aktualna wilgotność powietrza.
     *   **Ciśnienie**: Ciśnienie atmosferyczne (QNH).
     *   **Zjawiska**: Opisy stanów pogody (np. deszcz, mgła, burza).
-*   **Czas odświeżania**: Dane są automatycznie sprawdzane i aktualizowane co **30 minut** (dokładnie 33), zgodnie z typowym cyklem publikacji depesz METAR.
+*   **Czas odświeżania**: Dane są automatycznie sprawdzane i aktualizowane co **30 minut** (a dokładnie co 33 minuty), zgodnie z typowym cyklem publikacji depesz METAR.
 
 ## 🌐 Brak połączenia i stabilność
 *   Aplikacja posiada inteligentny system cache oraz autoodzyskiwania. W przypadku problemów:
