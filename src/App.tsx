@@ -498,11 +498,20 @@ export default function App() {
       lastTime = currentTime;
     }, 10000);
     
-    // Aligns to next 00 or 30 minute mark
+    // Aligns to next 00 or 30 minute mark + 2.5 minute buffer to allow for METAR propagation
     const now = new Date();
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
-    const msToNextAligned = ((30 - (minutes % 30)) * 60 - seconds) * 1000;
+    
+    // Target :02:30 or :32:30
+    let secondsToNext = 0;
+    if (minutes < 32) {
+      secondsToNext = ((32 - minutes) * 60 - seconds) + 30;
+    } else {
+      secondsToNext = ((62 - minutes) * 60 - seconds) + 30;
+    }
+    
+    const msToNextAligned = secondsToNext * 1000;
     
     let interval: any;
     const timeout = setTimeout(() => {
