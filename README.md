@@ -44,6 +44,8 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
 
 Aplikacja ma wbudowany moduł zaawansowanych wykresów historycznych. Aby go uruchomić, kliknij **litery 'H'** (widoczne wprawo od nazwy wybranego lotniska podczas najechania myszką).
 
+<img width="1920" height="1157" alt="2" src="https://github.com/user-attachments/assets/bf23f7c3-8c8c-4647-9210-14b0656dcab4" />
+
 *   **Eksploracja Czasowa**: Wybierz z kalendarza dogodny dla Ciebie zakres dat.
 *   **Warstwy Danych**: Płynnie włączaj i wyłączaj widoczność konkretnych parametrów we własnych osiach Y (Temperatura, Punkt Rosy, Wiatr, Ciśnienie).
 *   **Interaktywność**: 
