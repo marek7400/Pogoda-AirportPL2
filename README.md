@@ -6,6 +6,7 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
 <img width="1682" height="438" alt="1" src="https://github.com/user-attachments/assets/63188b79-9e8a-4957-9503-4d9ee6f20c69" />
 <BR>
 <BR>
+Kliknij na obrazek, żeby otworzyć film na Yoytube:
 <a href="https://www.youtube.com/watch?v=1YwJfrCKoiU">
   <img src="./maxresdefault.jpg" alt="Demo" width="700">
 </a>
