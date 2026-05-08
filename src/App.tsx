@@ -38,6 +38,8 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { appWindow, LogicalSize, LogicalPosition, currentMonitor } from '@tauri-apps/api/window';
 import { relaunch } from '@tauri-apps/api/process';
 
+import HistoryModal from './HistoryModal';
+
 interface WeatherData {
   wind: string | null;
   temperature: string | null;
@@ -177,6 +179,7 @@ export default function App() {
   const [showContextMenu, setShowContextMenu] = useState<{ x: number, y: number } | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [menuDirection, setMenuDirection] = useState<'up' | 'down'>('down');
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   useEffect(() => {
     const handleExpansion = async () => {
@@ -490,20 +493,19 @@ export default function App() {
       const currentTime = Date.now();
       const isOnline = navigator.onLine;
 
-      // 1. Wake up detection (clock jump > 1 min)
-      if (currentTime - lastTime > 60000) {
+      // 1. Wake up detection (clock jump > 3 min)
+      if (currentTime - lastTime > 180000) {
         console.log("System wake-up detected - restarting app");
         if ((window as any).__TAURI__) {
-          relaunch().catch(err => console.error("Failed to relaunch:", err));
+          import('@tauri-apps/api/process').then(({ relaunch }) => {
+            relaunch().catch(err => console.error("Failed to relaunch:", err));
+          });
         }
       }
 
       // 2. Recovery from offline state
       if (wasOffline && isOnline) {
         console.log("Network restored, fetching data...");
-        if ((window as any).__TAURI__) {
-          appWindow.setSkipTaskbar(true).catch(() => {});
-        }
         setTimeout(fetchWeather, 3000);
       }
 
@@ -606,6 +608,13 @@ export default function App() {
                       title="Wybierz lokalizację"
                     >
                       <MapPin className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setIsHistoryModalOpen(true); }}
+                      className="absolute left-[100%] top-0 ml-[-3px] p-1 px-1.5 rounded hover:bg-white/10 transition-colors cursor-pointer text-blue-400 hover:text-blue-300 font-bold text-[12px] leading-none"
+                      title="Dane historyczne"
+                    >
+                      H
                     </button>
                     {/* Airport Selection Menu */}
                     <AnimatePresence>
@@ -891,6 +900,14 @@ export default function App() {
           </>
         )}
       </AnimatePresence>
+
+      {/* History Modal Overlay */}
+      {isHistoryModalOpen && (
+        <HistoryModal 
+          icaoCode={selectedAirport} 
+          onClose={() => setIsHistoryModalOpen(false)} 
+        />
+      )}
     </div>
   );
 }

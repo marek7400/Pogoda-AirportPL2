@@ -39,6 +39,19 @@ Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe 
        
  <img width="494" height="477" alt="2" src="https://github.com/user-attachments/assets/07ce1ea2-4425-43d2-bb8d-3af3f218e0b2" />
 
+## 📈 Dane Historyczne i Wykresy (Nowość!)
+
+Aplikacja ma wbudowany moduł zaawansowanych wykresów historycznych. Aby go uruchomić, kliknij **litery 'H'** (widoczne wprawo od nazwy wybranego lotniska podczas najechania myszką).
+
+*   **Eksploracja Czasowa**: Wybierz z kalendarza dogodny dla Ciebie zakres dat.
+*   **Warstwy Danych**: Płynnie włączaj i wyłączaj widoczność konkretnych parametrów we własnych osiach Y (Temperatura, Punkt Rosy, Wiatr, Ciśnienie).
+*   **Interaktywność**: 
+    *   **Scroll (kółko myszy)** do swobodnego przybliżania i oddalania osi czasu (zoom).
+    *   **Lewy Przycisk Myszy + Przeciąganie** do przeglądania wykresu przód/tył.
+    *   Najeżdżając kursorem na punkty, odczytasz pełne parametry i wgląd do **oryginalnej depeszy METAR**.
+*   **Dynamiczne Min/Max**: Wykres na bieżąco oblicza aktualne minima i maksima dla wartości, które obserwujesz na wybranym i przybliżonym wycinku.
+*   **Tabela Danych**: Istnieje opcja przełączenia trybu na 'DANE', zrzucając odczyty ze stacji meteorologicznej do przystępnej, chronologicznej tabeli. M.in. z informacjami z Iowa Environmental Mesonet.
+
  # UWAGA!
 Skaner online Virus Total fałszywie pokazuje zagrożenie jako:
 
