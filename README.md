@@ -52,6 +52,9 @@ Aplikacja ma wbudowany moduł zaawansowanych wykresów historycznych. Aby go uru
 *   **Dynamiczne Min/Max**: Wykres na bieżąco oblicza aktualne minima i maksima dla wartości, które obserwujesz na wybranym i przybliżonym wycinku.
 *   **Tabela Danych**: Istnieje opcja przełączenia trybu na 'DANE', zrzucając odczyty ze stacji meteorologicznej do przystępnej, chronologicznej tabeli. M.in. z informacjami z Iowa Environmental Mesonet.
 
+<img width="1920" height="1164" alt="wykresy" src="https://github.com/user-attachments/assets/e37e988f-d889-47dd-be56-3ded89fccba7" />
+
+
  # UWAGA!
 Skaner online Virus Total fałszywie pokazuje zagrożenie jako:
 
