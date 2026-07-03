@@ -63,6 +63,7 @@ interface MetarRecord {
   dwpc: number | null;
   windKmh: number | null;
   pressureHpa: number | null;
+  humidity: number | null;
   metar: string;
 }
 
@@ -101,6 +102,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
   const [showDew, setShowDew] = useState(false);
   const [showWind, setShowWind] = useState(false);
   const [showPressure, setShowPressure] = useState(false);
+  const [showHumidity, setShowHumidity] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
 
   const [lineWidth, setLineWidth] = useState(3);
@@ -108,6 +110,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
   const [dewColor, setDewColor] = useState('#f97316');
   const [windColor, setWindColor] = useState('#60a5fa');
   const [pressureColor, setPressureColor] = useState('#c084fc');
+  const [humidityColor, setHumidityColor] = useState('#10b981');
 
   const [showDataModal, setShowDataModal] = useState(false);
   
@@ -160,6 +163,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
         dwpf: headers.indexOf('dwpf'),
         sknt: headers.indexOf('sknt'),
         alti: headers.indexOf('alti'),
+        relh: headers.indexOf('relh'),
         metar: headers.indexOf('metar')
       };
 
@@ -188,6 +192,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
           dwpc: fToC(parseNum(parts[idx.dwpf])),
           windKmh: parseNum(parts[idx.sknt]) !== null ? Number((parseNum(parts[idx.sknt])! * 1.852).toFixed(1)) : null,
           pressureHpa: parseNum(parts[idx.alti]) !== null ? Number((parseNum(parts[idx.alti])! * 33.8639).toFixed(1)) : null,
+          humidity: parseNum(parts[idx.relh]),
           metar: parts[idx.metar] || ''
         });
       }
@@ -247,7 +252,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
     return ticks;
   }, [zoomDomain, data]);
 
-  const calculateYAxis = (type: 'temp' | 'wind' | 'pressure') => {
+  const calculateYAxis = (type: 'temp' | 'wind' | 'pressure' | 'humidity') => {
     let relevantData = data;
     if (zoomDomain) {
       relevantData = data.filter(d => d.timestamp >= zoomDomain[0] && d.timestamp <= zoomDomain[1]);
@@ -267,6 +272,10 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
       relevantData.forEach(d => {
         if (showPressure && d.pressureHpa !== null && isFinite(d.pressureHpa)) vals.push(d.pressureHpa);
       });
+    } else if (type === 'humidity') {
+      relevantData.forEach(d => {
+        if (showHumidity && d.humidity !== null && isFinite(d.humidity)) vals.push(d.humidity);
+      });
     }
 
     if (vals.length === 0 && data.length > 0) {
@@ -283,12 +292,17 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
         data.forEach(d => {
           if (showPressure && d.pressureHpa !== null && isFinite(d.pressureHpa)) vals.push(d.pressureHpa);
         });
+      } else if (type === 'humidity') {
+        data.forEach(d => {
+          if (showHumidity && d.humidity !== null && isFinite(d.humidity)) vals.push(d.humidity);
+        });
       }
     }
 
     if (vals.length === 0) {
       if (type === 'temp') return { domain: [0, 40], ticks: [0, 10, 20, 30, 40] };
       if (type === 'wind') return { domain: [0, 50], ticks: [0, 10, 20, 30, 40, 50] };
+      if (type === 'humidity') return { domain: [0, 100], ticks: [0, 20, 40, 60, 80, 100] };
       return { domain: [1000, 1030], ticks: [1000, 1010, 1020, 1030] };
     }
 
@@ -304,12 +318,21 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
     } else if (type === 'wind') {
       step = 10;
       if (range <= 20) step = 5;
+    } else if (type === 'humidity') {
+      step = 20;
+      if (range <= 30) step = 5;
+      else if (range <= 50) step = 10;
     } else {
       step = 5;
     }
 
-    const domainMin = Math.floor(rawMin / step) * step;
-    const domainMax = Math.ceil(rawMax / step) * step;
+    let domainMin = Math.floor(rawMin / step) * step;
+    let domainMax = Math.ceil(rawMax / step) * step;
+
+    if (type === 'humidity') {
+      domainMin = Math.max(0, domainMin);
+      domainMax = Math.min(100, domainMax);
+    }
     
     const ticks = [];
     for (let i = domainMin; i <= domainMax; i += step) {
@@ -328,6 +351,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
   const tempAxis = calculateYAxis('temp');
   const windAxis = calculateYAxis('wind');
   const pressureAxis = calculateYAxis('pressure');
+  const humidityAxis = calculateYAxis('humidity');
 
   const hasNegativeTemp = (showTemp || showDew) && data.some(d => d.tmpc !== null && d.tmpc < 0);
 
@@ -344,6 +368,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
           <p className="mb-1">Temp: <span className="font-bold">{d.tmpc}°C</span></p>
           <p className="mb-1">Punkt Rosy: <span className="font-bold">{d.dwpc}°C</span></p>
           <p className="mb-1">Wiatr: <span className="font-bold">{d.windKmh} km/h</span></p>
+          <p className="mb-1">Wilgotność: <span className="font-bold">{d.humidity}%</span></p>
           <p className="mb-1">Ciśn: <span className="font-bold">{d.pressureHpa} hPa</span></p>
           <p className="mt-4 opacity-70 break-words text-lg leading-tight border-t border-white/20 pt-3">{d.metar}</p>
         </div>
@@ -440,7 +465,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
     const visibleData = zoomDomain ? data.filter(d => d.timestamp >= zoomDomain[0] && d.timestamp <= zoomDomain[1]) : data;
     if (visibleData.length === 0) return null;
 
-    const activeCount = [showTemp, showDew, showWind, showPressure].filter(Boolean).length;
+    const activeCount = [showTemp, showDew, showWind, showPressure, showHumidity].filter(Boolean).length;
     const isSingle = activeCount === 1;
 
     const blocks: React.ReactNode[] = [];
@@ -487,6 +512,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
     if (showTemp) addBlock('t', 'tmpc', 'T', tempColor);
     if (showDew) addBlock('d', 'dwpc', 'R', dewColor);
     if (showWind) addBlock('w', 'windKmh', 'W', windColor);
+    if (showHumidity) addBlock('h', 'humidity', 'WILG', humidityColor);
     if (showPressure) addBlock('p', 'pressureHpa', 'C', pressureColor);
     
     if (blocks.length === 0) return null;
@@ -570,6 +596,9 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
             <input type="checkbox" checked={showWind} onChange={e => setShowWind(e.target.checked)} className="w-4 h-4 accent-emerald-500" /> Wiatr
           </label>
           <label className="flex items-center gap-2 text-sm uppercase font-bold cursor-pointer hover:text-emerald-400 transition-colors">
+            <input type="checkbox" checked={showHumidity} onChange={e => setShowHumidity(e.target.checked)} className="w-4 h-4 accent-emerald-500" /> Wilgotność
+          </label>
+          <label className="flex items-center gap-2 text-sm uppercase font-bold cursor-pointer hover:text-emerald-400 transition-colors">
             <input type="checkbox" checked={showPressure} onChange={e => setShowPressure(e.target.checked)} className="w-4 h-4 accent-emerald-500" /> Ciśnienie
           </label>
           <div className="w-[1px] h-4 bg-white/10 mx-1 self-center"></div>
@@ -607,11 +636,12 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
             <div className="flex-1 w-full overflow-auto bg-black border border-white/10 p-4 font-mono text-white text-[14px] rounded-xl cursor-default" onMouseDown={e => e.stopPropagation()}>
               <table className="w-full text-left">
                 <thead className="sticky top-0 bg-black shadow-lg">
-                  <tr>
+                   <tr>
                     <th className="py-2 text-emerald-400">Czas</th>
                     <th className="py-2 text-red-400">Temp [°C]</th>
                     <th className="py-2 text-orange-400">Punkt Rosy [°C]</th>
                     <th className="py-2 text-blue-400">Wiatr [km/h]</th>
+                    <th className="py-2 text-emerald-400">Wilgotność [%]</th>
                     <th className="py-2 text-purple-400">Ciśnienie [hPa]</th>
                     <th className="py-2 text-zinc-500">METAR</th>
                   </tr>
@@ -623,6 +653,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
                       <td className="py-2">{d.tmpc ?? '-'}</td>
                       <td className="py-2">{d.dwpc ?? '-'}</td>
                       <td className="py-2">{d.windKmh ?? '-'}</td>
+                      <td className="py-2">{d.humidity ?? '-'}</td>
                       <td className="py-2">{d.pressureHpa ?? '-'}</td>
                       <td className="py-2 opacity-60 max-w-[300px] truncate">{d.metar}</td>
                     </tr>
@@ -727,6 +758,20 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
                         width={130}
                       />
                     )}
+
+                    {showHumidity && (
+                      <YAxis 
+                        yAxisId="humidity" 
+                        orientation={(showTemp || showDew) ? "right" : "left"} 
+                        stroke="#fff" 
+                        fontSize={28} 
+                        domain={humidityAxis.domain}
+                        allowDataOverflow={true}
+                        ticks={humidityAxis.ticks} 
+                        tickFormatter={v => `${v}%`}
+                        width={90}
+                      />
+                    )}
                     
                     <Tooltip content={<CustomTooltip />} isAnimationActive={false} />
                     <Legend wrapperStyle={{ fontSize: '18px', paddingTop: '20px' }} />
@@ -736,6 +781,7 @@ export default function HistoryModal({ icaoCode, onClose }: HistoryModalProps) {
                     {showTemp && <Line yAxisId="left" type="monotone" dataKey="tmpc" name="Temperatura" stroke={tempColor} dot={false} strokeWidth={lineWidth} isAnimationActive={false} />}
                     {showDew && <Line yAxisId="left" type="monotone" dataKey="dwpc" name="Punkt Rosy" stroke={dewColor} dot={false} strokeWidth={lineWidth} isAnimationActive={false} />}
                     {showWind && <Line yAxisId="wind" type="monotone" dataKey="windKmh" name="Wiatr" stroke={windColor} dot={false} strokeWidth={lineWidth} isAnimationActive={false} />}
+                    {showHumidity && <Line yAxisId="humidity" type="monotone" dataKey="humidity" name="Wilgotność" stroke={humidityColor} dot={false} strokeWidth={lineWidth} isAnimationActive={false} />}
                     {showPressure && <Line yAxisId="pressure" type="monotone" dataKey="pressureHpa" name="Ciśnienie" stroke={pressureColor} dot={false} strokeWidth={lineWidth} isAnimationActive={false} />}
                   </ComposedChart>
                 </ResponsiveContainer>

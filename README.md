@@ -3,15 +3,8 @@
 
 Lekka i nowoczesna aplikacja desktopowa dostarczająca precyzyjne dane pogodowe bezpośrednio z polskich lotnisk (depesze METAR). Zaprojektowana tak, aby nie zajmować miejsca na ekranie i oferować natychmiastowy wgląd w warunki atmosferyczne.
 
-<img width="1682" height="438" alt="1" src="https://github.com/user-attachments/assets/63188b79-9e8a-4957-9503-4d9ee6f20c69" />
-<BR>
-<BR>
-Kliknij na obrazek, żeby otworzyć film na Youtube:
-<a href="https://www.youtube.com/watch?v=1YwJfrCKoiU">
-  <img src="./maxresdefault.jpg" alt="Demo" width="700">
-</a>
-<BR>
-<BR>
+<img width="1032" height="226" alt="1" src="https://github.com/user-attachments/assets/9baa3ee0-7625-43d5-bc71-0deaaf0c26be" />
+
 ## 🚀 Główne możliwości
 
 *   **Precyzyjne dane lotnicze**: Aplikacja korzysta z oficjalnych depesz METAR, co gwarantuje najwyższą dokładność parametrów pogodowych.
@@ -49,8 +42,6 @@ Kliknij na obrazek, żeby otworzyć film na Youtube:
 ## 📈 Dane Historyczne i Wykresy (Nowość!)
 
 Aplikacja ma wbudowany moduł zaawansowanych wykresów historycznych. Aby go uruchomić, kliknij **litery 'H'** (widoczne wprawo od nazwy wybranego lotniska podczas najechania myszką).
-
-<img width="1920" height="1157" alt="2" src="https://github.com/user-attachments/assets/bf23f7c3-8c8c-4647-9210-14b0656dcab4" />
 
 *   **Eksploracja Czasowa**: Wybierz z kalendarza dogodny dla Ciebie zakres dat.
 *   **Warstwy Danych**: Płynnie włączaj i wyłączaj widoczność konkretnych parametrów we własnych osiach Y (Temperatura, Punkt Rosy, Wiatr, Ciśnienie).
